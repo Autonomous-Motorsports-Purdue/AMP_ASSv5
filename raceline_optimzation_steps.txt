@@ -1,0 +1,6 @@
+1. Generate centerline using map_converter.ipynb in https://github.com/CL2-UWaterloo/Raceline-Optimization
+2. go to https://github.com/TUMFTM/global_racetrajectory_optimization
+3. Put generated csv file into inputs/tracks
+4. Modify params/racecar.ini for specific vehicle info
+5. Change filepath in main_globaltraj.py
+6. Run main_globaltraj.py
