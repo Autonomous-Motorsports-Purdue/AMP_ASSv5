@@ -1,0 +1,3 @@
+[submodule "raceline"]
+	path = raceline
+	url = https://github.com/TUMFTM/global_racetrajectory_optimization
