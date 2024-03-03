@@ -6,7 +6,7 @@ if __name__ == "__main__":
     print("Listener Connected")
     while True:
         pos = c.root.get_position()
-        if pos:
+        if pos is not None:
             print(pos.get())
         #s = time.asctime(now)
         #print(s)
