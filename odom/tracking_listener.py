@@ -7,7 +7,7 @@ if __name__ == "__main__":
     while True:
         pos = c.root.get_position()
         if pos is not None:
-            print(pos.get())
+            print(pos)
         #s = time.asctime(now)
         #print(s)
         time.sleep(0.1)
