@@ -53,7 +53,7 @@ class Odom:
             if tracking_state == sl.POSITIONAL_TRACKING_STATE.OK:
                 # rotation = camera_pose.get_rotation_vector()
                 translation_coords = self.camera_pose.get_translation(self.translation)
-                return translation_coords
+                return translation_coords.get()
         else:
             return None
 
