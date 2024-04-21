@@ -43,3 +43,8 @@ class Talker(rypc.service):
             return np.copy(image.get_data())
         else:
             return None
+
+def main():
+    from rpyc.utils.server import ThreadedServer
+    t = ThreadedServer(Talker, port=18862)
+    t.start()
