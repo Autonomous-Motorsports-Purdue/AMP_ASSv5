@@ -13,8 +13,8 @@ class Talker(rpyc.Service):
         input_type = sl.InputType()
         init = sl.InitParameters(input_t=input_type)
         init.camera_resolution = sl.RESOLUTION.HD1080
-        init.depth_mode = sl.DEPTH_MODE.PERFORMANCE
-        init.coordinate_units = sl.UNIT.INCH
+        init.depth_mode = sl.DEPTH_MODE.ULTRA
+        init.coordinate_units = sl.UNIT.FOOT
 
         # Open the camera
         err = self.zed.open(init)
@@ -55,9 +55,12 @@ class Talker(rpyc.Service):
         else:
             return None
 
+    def exposed_get_camera_params(self):
+        return self.zed.get_camera_information()
+
 def main():
     from rpyc.utils.server import ThreadedServer
-    t = ThreadedServer(Talker, port=18862)
+    t = ThreadedServer(Talker, port=9002)
     t.start()
 
 if __name__ == "__main__":
