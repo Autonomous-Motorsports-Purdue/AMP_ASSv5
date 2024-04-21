@@ -1,8 +1,9 @@
-import rypc
+import rpyc
 import pyzed.sl as sl
 import numpy as np
+import pickle
 
-class Talker(rypc.service):
+class Talker(rpyc.Service):
 
     def __init__(self):
         # Create a ZED camera object
@@ -40,7 +41,17 @@ class Talker(rypc.service):
             # A new image is available if grab() returns ERROR_CODE.SUCCESS
             image = sl.Mat()
             self.zed.retrieve_image(image, sl.VIEW.LEFT)
-            return np.copy(image.get_data())
+            # return np.copy(image.get_data()).tobytes()
+            return pickle.dumps(np.copy(image.get_data()))
+        else:
+            return None
+    def exposed_get_depth_frame(self):
+        if self.zed.grab(self.runtime) == sl.ERROR_CODE.SUCCESS:
+            # A new image is available if grab() returns ERROR_CODE.SUCCESS
+            image = sl.Mat()
+            self.zed.retrieve_image(image, sl.VIEW.DEPTH)
+            # return np.copy(image.get_data()).tobytes()
+            return pickle.dumps(np.copy(image.get_data()))
         else:
             return None
 
@@ -48,3 +59,6 @@ def main():
     from rpyc.utils.server import ThreadedServer
     t = ThreadedServer(Talker, port=18862)
     t.start()
+
+if __name__ == "__main__":
+    main()
