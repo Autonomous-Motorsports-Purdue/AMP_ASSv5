@@ -266,6 +266,12 @@ class SteeringControl:
         self.ax = ax
         self.ay = ay
         self.goal = [ax[-1], ay[-1]]
+        self.init_state = State(x=ax[0], y=ay[0], yaw=0.0, v=0.0)
+        self.accel_control_history = []
+        self.steering_control_history = []
+        self.velocity_control_history = []
+        self.x_history = [self.init_state.x]
+        self.y_history = [self.init_state.y]
         self.cx, self.cy, self.cyaw, self.ck, self.s = cubic_spline_planner.calc_spline_course(self.ax, self.ay, ds=0.1)
         self.speed_profile = calc_speed_profile(self.cyaw, self.speed_target)
 
@@ -308,3 +314,8 @@ class Talker(rpyc.service):
             self.kart_control_conn.root.update_steering(steer_values[i])
             self.kart_control_conn.root.write_serial()
             time.sleep(0.1)
+
+if __name__ == "__main__":
+    from rpyc.utils.server import ThreadedServer
+    t = ThreadedServer(Talker, port=9004)
+    t.start()
