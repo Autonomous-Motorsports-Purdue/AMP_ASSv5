@@ -1,8 +1,8 @@
-import rypc
+import rpyc
 import pyzed.sl as sl
 import numpy as np
 
-class Talker(rypc.service):
+class Talker(rpyc.service):
 
     def __init__(self):
         # Create a ZED camera object
@@ -48,3 +48,6 @@ def main():
     from rpyc.utils.server import ThreadedServer
     t = ThreadedServer(Talker, port=18862)
     t.start()
+
+if __name__ == "__main__":
+    main()
