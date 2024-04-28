@@ -139,16 +139,24 @@ class Bezier:
         cv2.polylines(img, [np.int32(curve)], isClosed=False, color=(255, 255, 255), thickness=2)
 
         return curve
+    
+    def get_midpoint_control(self, sobel1, img):
+        largest = self.find_two_largest_contours(img)
 
-    # def get_midpoint_control(self, contour1, contour2):
-    #     contour_points1 = np.transpose(np.nonzero(contour1))[0::8]
-    #     control_points1 = np.array(self.get_bezier(contour_points1))
+        contour1 = self.crop_to_contour(sobel1, largest[0])
+        contour2 = self.crop_to_contour(sobel1, largest[1])
 
-    #     contour_points2 = np.transpose(np.nonzero(contour2))[0::8]
-    #     control_points2 = np.array(self.get_bezier(contour_points2))
+        contour_points1 = np.transpose(np.nonzero(contour1))[0::8]
+        control_points1 = np.array(self.get_bezier(contour_points1))
+        control_points1 = np.flip(control_points1, axis=1)
+        control_points1 = control_points1 + np.array([cv2.boundingRect(largest[0])[0], crop_top])
 
-    #     return (control_points1 + control_points2) / 2
+        contour_points2 = np.transpose(np.nonzero(contour2))[0::8]
+        control_points2 = np.array(self.get_bezier(contour_points2))
+        control_points2 = np.flip(control_points2, axis=1) 
+        control_points2 = control_points2 + np.array([cv2.boundingRect(largest[1])[0], crop_top])
 
+        return (control_points1 + control_points2) / 2
 
 
 
@@ -289,8 +297,8 @@ class Bezier:
 
         test_img = cv2.imread(f'imgs/img_{self.img_count}.jpg')
 
-        #control points
-        control_points = self.get_bezier(midpoint_line)
+        # control_points = self.get_bezier(midpoint_line)
+        control_points = self.get_midpoint_control(sobel1, contours_open_open)
         print("controlPoints:")
         for point in control_points:
             point[1] += self.crop_top # account for scaling
